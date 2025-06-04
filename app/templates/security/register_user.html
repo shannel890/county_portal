@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+    {% block title %}Register - County Services Portal{% endblock %}
+
+    {% block content %}
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fas fa-user-plus fa-2x mb-3"></i>
+                <h1>Create Account</h1>
+                <p>Join your county's digital services platform</p>
+            </div>
+
+            <div class="auth-body">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {# 'error' category from backend usually maps to 'danger' in Bootstrap #}
+                            <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                                <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'info-circle' }} me-2"></i>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {# Add 'needs-validation' class to the form. 'novalidate' prevents browser's default HTML5 popups. #}
+                <form method="POST" action="{{ url_for_security('register') }}" class="needs-validation" novalidate>
+                    {{ register_user_form.hidden_tag() }}
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {# Added 'required' attribute, assuming the WTForm field doesn't automatically add it #}
+                                {# Added placeholder for better UX with form-floating #}
+                                {{ register_user_form.first_name(class="form-control" + (" is-invalid" if register_user_form.first_name.errors else ""), placeholder="First Name", required=true) }}
+                                {{ register_user_form.first_name.label(class="form-label") }}
+                                {% if register_user_form.first_name.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in register_user_form.first_name.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ register_user_form.last_name(class="form-control" + (" is-invalid" if register_user_form.last_name.errors else ""), placeholder="Last Name", required=true) }}
+                                {{ register_user_form.last_name.label(class="form-label") }}
+                                {% if register_user_form.last_name.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in register_user_form.last_name.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-floating mt-3"> {# Added mt-3 for spacing after row #}
+                        {{ register_user_form.email(class="form-control" + (" is-invalid" if register_user_form.email.errors else ""), placeholder="name@example.com", required=true) }}
+                        {{ register_user_form.email.label(class="form-label") }}
+                        {% if register_user_form.email.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in register_user_form.email.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-floating mt-3">
+                        {# Phone number is often optional, so 'required=false' or omit 'required' #}
+                        {{ register_user_form.phone_number(class="form-control" + (" is-invalid" if register_user_form.phone_number.errors else ""), placeholder="e.g., 07xxxxxxxx (Optional)") }}
+                        {{ register_user_form.phone_number.label(class="form-label") }}
+                        {% if register_user_form.phone_number.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in register_user_form.phone_number.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        {# No form-floating for select, mb-3/mt-3 are good for spacing #}
+                        {{ register_user_form.county_id.label(class="form-label fw-bold") }}
+                        {{ register_user_form.county_id(class="form-select form-select-lg" + (" is-invalid" if register_user_form.county_id.errors else ""), required=true) }} {# Assuming county selection is required #}
+                        {% if register_user_form.county_id.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in register_user_form.county_id.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Select the county where you reside or work
+                        </div>
+                    </div>
+
+                    <div class="form-floating mt-3">
+                        {{ register_user_form.password(class="form-control" + (" is-invalid" if register_user_form.password.errors else ""), placeholder="Password", required=true, autocomplete="new-password") }} {# Added required & autocomplete #}
+                        {{ register_user_form.password.label(class="form-label") }}
+                        {% if register_user_form.password.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in register_user_form.password.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-floating mt-3">
+                        {{ register_user_form.password_confirm(class="form-control" + (" is-invalid" if register_user_form.password_confirm.errors else ""), placeholder="Confirm Password", required=true, autocomplete="new-password") }} {# Added required & autocomplete #}
+                        {{ register_user_form.password_confirm.label(class="form-label") }}
+                        {% if register_user_form.password_confirm.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in register_user_form.password_confirm.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        {{ register_user_form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+
+                <div class="footer-links">
+                    <a href="{{ url_for_security('login') }}">
+                        <i class="fas fa-sign-in-alt me-1"></i>
+                        Already have an account? Sign In
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block extra_js %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form.needs-validation'); // Target the form by its class
+        const firstEmptyField = document.querySelector('.form-control:not([value]):not([placeholder]):not(:disabled)'); // More robust auto-focus
+        if (firstEmptyField) {
+            firstEmptyField.focus();
+        }
+
+        // --- Bootstrap Client-Side Validation Logic ---
+        if (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) { // Check HTML5 validation state
+                    event.preventDefault(); // Prevent submission if invalid
+                    event.stopPropagation(); // Stop propagation
+
+                    // Scroll to and focus the first invalid field for better UX
+                    const firstInvalid = form.querySelector('.is-invalid');
+                    if (firstInvalid) {
+                        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        firstInvalid.focus();
+                    }
+                }
+                form.classList.add('was-validated'); // Apply validation styles
+            }, false);
+
+            // Add real-time validation feedback as user types/selects
+            form.querySelectorAll('.form-control, .form-select').forEach(field => {
+                field.addEventListener('input', function() {
+                    // Remove existing Bootstrap validation classes
+                    this.classList.remove('is-valid', 'is-invalid');
+
+                    // Apply validation classes based on HTML5 validity
+                    if (this.checkValidity()) {
+                        this.classList.add('is-valid');
+                    } else {
+                        // Only add is-invalid if the form has been attempted (was-validated)
+                        // or if the field was already marked invalid by server-side errors
+                        if (form.classList.contains('was-validated') || this.classList.contains('is-invalid')) {
+                            this.classList.add('is-invalid');
+                        }
+                    }
+                });
+
+                // Specific handling for select elements on change
+                if (field.tagName === 'SELECT') {
+                    field.addEventListener('change', function() {
+                        this.classList.remove('is-valid', 'is-invalid');
+                        if (this.checkValidity()) {
+                            this.classList.add('is-valid');
+                        } else {
+                             if (form.classList.contains('was-validated') || this.classList.contains('is-invalid')) {
+                                this.classList.add('is-invalid');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    });
+    </script>
+    {% endblock %}
