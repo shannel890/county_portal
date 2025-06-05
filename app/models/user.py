@@ -62,5 +62,4 @@ class User(db.Model,UserMixin):
         return any(role.name == role_name for role in self.roles)
     
     def __repr__(self):
-        role_names = [role.name for role in self.roles]
-        return f'user {self.email} {role_names}'
+        return f'role:{self.name}'
