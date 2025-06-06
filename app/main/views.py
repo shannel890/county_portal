@@ -14,7 +14,7 @@ from datetime import datetime
 main_bp = Blueprint('main_bp',__name__)
 
 @main_bp.route('/')
-@login_required
+
 def index():
     """Home page - redirect based on authentication status"""
     if current_user.is_authenticated:
@@ -102,10 +102,11 @@ def staff_dashboard():
                                                                                   
         # Get recent applications (last 10)                                       
     recent_applications = applications[:10] 
-    return render_template('main/citizen_dashboard.html',
+    return render_template('main/staff_dashboard.html',
                             county=county,
                             departments=departments,
                             stats=stats,
+                            applications=applications,
                             recent_applications=recent_applications)                          
 
 @main_bp.route('/citizen-dashboard')                                          
@@ -139,6 +140,7 @@ def citizen_dashboard():
     return render_template('main/citizen_dashboard.html',
                             county=county,
                             departments=departments,
+                            applications=applications,
                             permit_types=permit_types,
                             stats=stats)
 
