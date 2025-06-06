@@ -36,6 +36,7 @@ class Department(db.Model):
                                                                                   
         # Relationships                                                           
         officers = db.relationship('User', backref='department', lazy='dynamic')  
+        permit_types = db.relationship('PermitType', backref='department', lazy='dynamic')
                                                                                   
         def __repr__(self):                                                       
             return f'Department {self.name} - {self.county.name}'
