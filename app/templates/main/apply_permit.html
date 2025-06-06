@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Apply for Permit{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <!-- Header -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <h2 class="h4 mb-3">
+                        <i class="fas fa-file-plus text-primary me-2"></i>
+                        Apply for New Permit
+                    </h2>
+                    <p class="text-muted mb-0">
+                        Submit your permit application for {{ current_user.county.name }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Application Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-clipboard-list me-2"></i>
+                        Application Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+
+                        <!-- Permit Type Selection -->
+                        <div class="mb-4">
+                            {{ form.permit_type_id.label(class="form-label fw-bold") }}
+                            {{ form.permit_type_id(class="form-select form-select-lg") }}
+                            {% if form.permit_type_id.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.permit_type_id.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Business Details -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form.business_name.label(class="form-label fw-bold") }}
+                                {{ form.business_name(class="form-control") }}
+                                {% if form.business_name.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in form.business_name.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.contact_phone.label(class="form-label fw-bold") }}
+                                {{ form.contact_phone(class="form-control") }}
+                                {% if form.contact_phone.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in form.contact_phone.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Addresses -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form.business_address.label(class="form-label fw-bold") }}
+                                {{ form.business_address(class="form-control") }}
+                                {% if form.business_address.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in form.business_address.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.location_address.label(class="form-label fw-bold") }}
+                                {{ form.location_address(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label fw-bold") }}
+                            {{ form.description(class="form-control") }}
+                        </div>
+
+                        <!-- File Upload -->
+                        <div class="mb-4">
+                            {{ form.documents.label(class="form-label fw-bold") }}
+                            {{ form.documents(class="form-control") }}
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Upload supporting documents (PDF, images, or documents). Max 10MB per file.
+                            </div>
+                            {% if form.documents.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.documents.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Submit Buttons -->
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="{{ url_for('main_bp.dashboard') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-1"></i>Submit Application
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
