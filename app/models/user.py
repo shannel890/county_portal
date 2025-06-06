@@ -61,5 +61,15 @@ class User(db.Model,UserMixin):
     def has_role(self, role_name):
         return any(role.name == role_name for role in self.roles)
     
+    def get_primary_role(self):
+        """Returns the primary role of the user"""
+        if self.roles:
+            # Return the first role, or 'citizen' if it exists
+            citizen_role = next((role for role in self.roles if role.name == 'citizen'), None)
+            if citizen_role:
+                return citizen_role.name
+            return self.roles[0].name
+        return 'No Role'
+
     def __repr__(self):
         return f'role:{self.name}'
