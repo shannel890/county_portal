@@ -209,8 +209,8 @@ def create_app():
         admin_user = User.query.filter_by(email='shannel@gmail.com').first()
         if not admin_user:
             admin_user = User(
-                email='shannel@gmail.com',
-                password=hash_password('shannel254'),
+                email='shannelkirui739@gmail.com',
+                password=hash_password('12345678'),
                 first_name='shannel',
                 last_name='kirui',
                 active=True,
